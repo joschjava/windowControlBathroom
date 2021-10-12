@@ -70,6 +70,8 @@ void loop() {
     myFile.print(temp);
     myFile.print("\n");
     myFile.flush();
+
+    
     // close the file:
    // myFile.close();
     Serial.print(hum);
