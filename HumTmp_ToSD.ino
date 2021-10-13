@@ -35,6 +35,11 @@ float temp; //Stores temperature value
 
 File myFile;
 
+const long interval = 2000;          
+unsigned long previousMillis = 0;        // will store last time LED was updated
+
+
+
 void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
@@ -59,28 +64,33 @@ void setup() {
 }
 
 void loop() {
-    //Read data and store it to variables hum and temp
-    hum = dht.readHumidity();
-    temp= dht.readTemperature();
-
-    // if the file opened okay, write to it:
-  if (myFile) {
-    myFile.print(hum);
-    myFile.print(";");
-    myFile.print(temp);
-    myFile.print("\n");
-    myFile.flush();
-
+    unsigned long currentMillis = millis();
+    if (currentMillis - previousMillis >= interval) {
+        unsigned long currentMillis = millis();
+        // save the last time you blinked the LED
+        previousMillis = currentMillis;
+        //Read data and store it to variables hum and temp
+        hum = dht.readHumidity();
+        temp= dht.readTemperature();
     
-    // close the file:
-   // myFile.close();
-    Serial.print(hum);
-    Serial.print(";");
-    Serial.print(temp);
-    Serial.print("\n");
-  } else {
-    // if the file didn't open, print an error:
-    Serial.println("error opening test.txt");
-  }
-   delay(2000); //Delay 2 sec.
+        // if the file opened okay, write to it:
+      if (myFile) {
+        myFile.print(hum);
+        myFile.print(";");
+        myFile.print(temp);
+        myFile.print("\n");
+        myFile.flush();
+    
+        
+        // close the file:
+       // myFile.close();
+        Serial.print(hum);
+        Serial.print(";");
+        Serial.print(temp);
+        Serial.print("\n");
+      } else {
+        // if the file didn't open, print an error:
+        Serial.println("error opening test.txt");
+      }
+    }
 }
